@@ -7,7 +7,7 @@ float EaseInQuart(float x){
 // @param[default=#FFFFFFFF] color0
 // @param[default=#000000FF] color1
 vec4 main(vec4 color0, vec4 color1) {
-  vec2 UV = fragment(std::getVertexTexCoord());
-  float interpolationFactor = std::gradientCircular(UV);
-  return mix(color0, color1, EaseInQuart(interpolationFactor));
+	vec2 UV = fragment(std::getVertexTexCoord());
+	float interpolationFactor = std::gradientCircular(UV);
+	return mix(color0, color1, EaseInQuart(interpolationFactor));
 }
