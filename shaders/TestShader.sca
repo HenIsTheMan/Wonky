@@ -1,19 +1,18 @@
-#import <gradients>
-#import <sdf>
+#import <utils>
 
-// @param[default=#00FFFFFF] color1
-// @param[default=#0000C0FF] color2
-// @param[default=5.0,min=4.0,max=9.0] armCount
-vec4 main(vec4 color1, vec4 color2, float armCount) {
-  vec2 uv = fragment(std::getVertexTexCoord());
-  vec4 color = mix(color1, color2, std::gradientHorizontal(uv));
+// @param[default=#FFFFFFFF] color0
+// @param[default=#000000FF] color1
+vec4 main(vec4 color0, vec4 color1) {
+	vec2 UV = fragment(std::getVertexTexCoord());
 
-  auto sdf = std::sdfStarSharp(vec2(0.5, 0.5), 0.1, 0.7, floor(armCount));
-
-  auto test = std::sdfRound(std::sdfRotation(sdf, vec2(0.5, 0.5), std::getTime()), 0.04);
-
-  float dist = test(uv);
-  float edge = fwidth(dist);
-  float alpha = smoothstep(-edge, +edge, dist);
-  return mix(color, color.rgb0, alpha);
+	vec2 dist = UV - vec2(0.5);
+	float r = std::safeLength(dist);
+	vec2 distortedTexCoords = UV + dist * sin(r * r * 4.0) * r * 0.5;
+	
+	if(distortedTexCoords.x < 0.0 || distortedTexCoords.x > 1.0 || distortedTexCoords.y < 0.0 || distortedTexCoords.y > 1.0){
+		return vec4(0.0);
+	}
+    
+	//FragColor = vec4(texture(screenTex, distortTexCoords).rgb, 1.f);
+		return mix(color0, color1, 0.5);
 }
