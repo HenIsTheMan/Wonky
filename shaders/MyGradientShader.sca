@@ -1,5 +1,7 @@
 #import <gradients>
 
+#import <utils>
+
 float EaseInQuart(float x){
 	return x * x * x * x;
 }
@@ -9,5 +11,10 @@ float EaseInQuart(float x){
 vec4 main(vec4 color0, vec4 color1) {
 	vec2 UV = fragment(std::getVertexTexCoord());
 	float interpolationFactor = std::gradientCircular(UV);
+
+	interpolationFactor += cos(std::getTime() * 4.0) * 0.1;
+
+	interpolationFactor = clamp(interpolationFactor, 0.0, 1.0);
+
 	return mix(color0, color1, EaseInQuart(interpolationFactor));
 }
