@@ -1,18 +1,15 @@
 #import <utils>
 
-// @param[default=#FFFFFFFF] color0
-// @param[default=#000000FF] color1
-vec4 main(vec4 color0, vec4 color1) {
+vec4 main(std::Texture2d tex) {
 	vec2 UV = fragment(std::getVertexTexCoord());
 
-	vec2 dist = UV - vec2(0.5);
+	vec2 dist = UV - vec2(0.4);
 	float r = std::safeLength(dist);
-	vec2 distortedTexCoords = UV + dist * sin(r * r * 4.0) * r * 0.5;
+	vec2 distortedTexCoords = UV + dist * sin(r * r * 4.0) * r * 0.4;
 	
 	if(distortedTexCoords.x < 0.0 || distortedTexCoords.x > 1.0 || distortedTexCoords.y < 0.0 || distortedTexCoords.y > 1.0){
 		return vec4(0.0);
 	}
     
-	//FragColor = vec4(texture(screenTex, distortTexCoords).rgb, 1.f);
-		return mix(color0, color1, 0.5);
+	return tex.sample(distortedTexCoords);
 }
